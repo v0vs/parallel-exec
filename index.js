@@ -2,7 +2,7 @@ const createParallel = (parallelism) => {
     const parallelismLevel = parallelism;
     let runningTasks = new Set();
     let taskId = 0;
-    const newTasksToRun = new Set();
+    const newTasksIdsToRun = new Set();
 
     const addNewTask = (promise, tasks) => {
         tasks.add(promise);
@@ -19,8 +19,8 @@ const createParallel = (parallelism) => {
     }
 
     const appendNewTaskToRunningTask = (nextTaskId, asyncFunc) => {
-        if (newTasksToRun.has(nextTaskId)){
-            newTasksToRun.delete(nextTaskId);
+        if (newTasksIdsToRun.has(nextTaskId)){
+            newTasksIdsToRun.delete(nextTaskId);
             return asyncFunc().then(() => {
                 return {nextTaskId};
             }).catch((err) => {
@@ -58,7 +58,7 @@ const createParallel = (parallelism) => {
         }
 
         const currentTaskId = ++taskId;
-        newTasksToRun.add(currentTaskId);
+        newTasksIdsToRun.add(currentTaskId);
 
         const currentTasks = new Set();
         const newRunningTasks = new Set();
